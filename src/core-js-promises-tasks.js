@@ -89,8 +89,15 @@ function getFirstResolvedPromiseResult(promises) {
  * [promise3, promise6, promise2] => Promise rejected with 2
  * [promise3, promise4, promise6] => Promise rejected with 6
  */
-function getFirstPromiseResult(/* promises */) {
-  throw new Error('Not implemented');
+function getFirstPromiseResult(promises) {
+  return Promise.any(
+    promises.map((promise) =>
+      promise.then(
+        (value) => Promise.resolve(value),
+        (error) => Promise.reject(error)
+      )
+    )
+  );
 }
 
 /**
